@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f7f1">
+  <meta name="description" content="How the SautiShamba demo works, its human approval boundary, intended architecture, and current limitations.">
+  <title>How SautiShamba works</title>
+  <style>
+    :root{--ink:#21342a;--muted:#758179;--line:#e5ebe3;--green:#2d7049;--canvas:#f5f7f1;--soft:#edf5eb;--amber:#fff5e4}
+    *{box-sizing:border-box}body{margin:0;background:var(--canvas);color:var(--ink);font:15px/1.65 "Segoe UI",Arial,sans-serif}
+    a{color:var(--green)}.top{position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;align-items:center;padding:13px max(20px,calc((100vw - 1040px)/2));background:#fffffff0;border-bottom:1px solid var(--line);backdrop-filter:blur(10px)}
+    .brand{font-weight:750;text-decoration:none;color:var(--ink)}.brand span{display:inline-grid;place-items:center;width:28px;height:28px;margin-right:8px;border-radius:9px;background:var(--green);color:white}
+    .back{font-size:13px;font-weight:650;text-decoration:none}.wrap{max-width:1000px;margin:auto;padding:56px 24px 72px}.eyebrow{color:#79887b;font-size:11px;font-weight:750;letter-spacing:1.5px}
+    h1,h2,h3{font-family:"Segoe UI",Arial,sans-serif;line-height:1.2;letter-spacing:-.4px}h1{max-width:750px;margin:10px 0 12px;font-size:clamp(32px,6vw,48px)}h2{margin:0 0 16px;font-size:25px}h3{margin:0 0 8px;font-size:16px}.lede{max-width:740px;color:#637168;font-size:17px}
+    .notice{margin:25px 0 42px;padding:16px 19px;border:1px solid #ecdcb9;border-radius:10px;background:var(--amber);color:#6f5c37}.notice strong{display:block;margin-bottom:3px}.section{margin:42px 0}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.card,.diagram,.step,.status{border:1px solid var(--line);border-radius:11px;background:white}.card{padding:18px}.card p,.muted{margin:6px 0 0;color:var(--muted);font-size:13px}
+    .diagram{padding:23px;background:#fff}.flow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;align-items:stretch}.node{padding:13px;border:1px solid #dfe8dd;border-radius:8px;background:#fbfdf9;font-size:13px}.node strong{display:block;margin-bottom:4px;color:#315d3d}.arrow{display:grid;place-items:center;color:#79a07b;font-size:21px}.flow-line{display:flex;justify-content:center;align-items:center;gap:9px;margin:10px 0;color:#54815b;font-size:13px;font-weight:650}.flow-line .line{width:80px;border-top:1px solid #96b496}
+    .status{padding:17px 19px;background:#f0f7ef;border-color:#dceadc}.status strong{color:#326740}.status p{margin:5px 0 0;color:#637a64}
+    .steps{display:grid;gap:9px}.step{display:flex;gap:14px;padding:14px 16px}.num{display:grid;place-items:center;width:27px;height:27px;flex:0 0 27px;border-radius:50%;background:var(--soft);color:var(--green);font-weight:750}.step p{margin:0;color:#66736a}
+    code{padding:2px 5px;border-radius:4px;background:#eef1ec;font-size:.9em}.tag{display:inline-block;padding:3px 7px;border-radius:12px;background:#f0f2ee;color:#6f7c73;font-size:11px;font-weight:700}.footer{margin-top:50px;padding-top:18px;border-top:1px solid var(--line);color:#829087;font-size:13px}
+    @media(max-width:680px){.wrap{padding:36px 17px 50px}.cards{grid-template-columns:1fr}.flow{grid-template-columns:1fr}.arrow{transform:rotate(90deg)}.top{padding:12px 16px}.lede{font-size:15px}}
+  </style>
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="index.html"><span>♧</span>SautiShamba</a>
+    <a class="back" href="index.html">← Back to officer desk</a>
+  </header>
+  <main class="wrap">
+    <div class="eyebrow">PRODUCT + TECHNICAL OVERVIEW</div>
+    <h1>Useful local advice, with an officer always in control.</h1>
+    <p class="lede">SautiShamba is designed to help extension officers turn local conditions into clear recommendations for smallholder farmer groups, then prepare the advice in formats more farmers can use.</p>
+    <aside class="notice"><strong>This is a front-end demo—not a live AI service.</strong>It uses fictional groups and illustrative values. No backend, live data, AI agent, MCP server, messaging connection or farmer delivery is active.</aside>
+
+    <section class="section">
+      <div class="eyebrow">THE NEED</div>
+      <h2>Problem and proposed solution</h2>
+      <div class="cards">
+        <article class="card"><h3>Problem</h3><p>Officers need timely, local planting and market context. Information can be scattered, hard to verify, and difficult to communicate accessibly across languages and formats.</p></article>
+        <article class="card"><h3>Solution concept</h3><p>Bring group priorities and attributed conditions into one officer workspace; prepare a draft that can be checked and adapted before it goes anywhere.</p></article>
+        <article class="card"><h3>For whom</h3><p>Extension officers in Eastern Uganda are the primary users. Farmer groups are the intended recipients of approved advice—not users of this officer-desk prototype.</p></article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="eyebrow">SYSTEM DESIGN</div>
+      <h2>Architecture and agent boundary</h2>
+      <div class="diagram" role="img" aria-label="Intended architecture showing the officer interface, backend with verified sources, advisory drafting agent, human approval and controlled delivery">
+        <div class="flow">
+          <div class="node"><strong>1 · Officer interface</strong>Select group, inspect evidence, review/edit draft.</div>
+          <div class="node"><strong>2 · Future backend</strong>Authentication, group records, source adapters and approval audit.</div>
+          <div class="node"><strong>3 · Bounded agent</strong>Could draft with cited context and uncertainty. Cannot approve or deliver.</div>
+        </div>
+        <div class="flow-line"><span class="line"></span>draft + evidence<span class="line"></span>human review</div>
+        <div class="flow">
+          <div class="node"><strong>4 · Officer decision</strong>Edit, reject, or explicitly approve this exact version.</div>
+          <div class="node"><strong>5 · Accessible formats</strong>Prepare validated voice, SMS, large print or interpreter content.</div>
+          <div class="node"><strong>6 · Controlled delivery</strong>Future connector; only approved content, with safeguards and a delivery record.</div>
+        </div>
+      </div>
+      <p class="muted">Only the officer-approval step exists as a local UI interaction in this demo. The other boxes describe a potential production design, not running services.</p>
+    </section>
+
+    <section class="section">
+      <div class="eyebrow">HUMAN-IN-THE-LOOP</div>
+      <h2>Approval is a hard boundary, not a suggestion</h2>
+      <div class="status"><strong>The AI must never directly message farmers.</strong><p>A future system should reject delivery requests unless an authorized officer has approved the exact content and evidence. Editing after approval must invalidate that approval and require a fresh review. The present prototype has no delivery capability at all.</p></div>
+      <div class="steps" style="margin-top:13px">
+        <div class="step"><span class="num">1</span><p>Officer selects a farmer group and checks the condition cards and their source/freshness.</p></div>
+        <div class="step"><span class="num">2</span><p>Draft is reviewed and may be edited. The officer can reject it; rejection ends this draft's path.</p></div>
+        <div class="step"><span class="num">3</span><p>Only explicit officer approval could authorize a future delivery flow. Demo approval is only a visual state change in this browser tab.</p></div>
+        <div class="step"><span class="num">4</span><p>Voice, SMS, large-print and sign-language tabs currently show format concepts only. Voice can use the browser's speech engine; it is not verified Lumasaba audio. The sign brief is not a translation.</p></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="eyebrow">INTEGRATION STATUS</div>
+      <h2>MCP, tools and data</h2>
+      <div class="cards">
+        <article class="card"><h3>MCP implementation</h3><p><span class="tag">Not implemented</span></p><p>No MCP client or server configuration, protocol transport, tool registration or MCP-backed data exists in this repository.</p></article>
+        <article class="card"><h3>MCP tools / servers</h3><p><span class="tag">None connected</span></p><p>Weather, market and transport cards use static illustrative values. Their labels explain the mock source; they are not operational integrations.</p></article>
+        <article class="card"><h3>Current technology</h3><p>Single-page HTML, CSS and vanilla JavaScript. No dependency installation, framework, database or build pipeline is required. Browser speech synthesis is optional.</p></article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="eyebrow">TRY THE DEMO</div>
+      <h2>Setup and usage</h2>
+      <div class="card">
+        <p>Open <code>index.html</code> directly in a modern browser, or serve the repo root with <code>python -m http.server 8000</code> and visit <code>http://localhost:8000</code>. There are no packages to install.</p>
+        <p>Search or filter groups, select one, inspect its sample conditions, then edit, reject or approve the draft. Explore each accessible-format tab. These actions stay in the front end; nothing is saved to a server or sent.</p>
+        <p><strong>Demo video:</strong> <a href="demo-video.webm">Play the short walkthrough</a>.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="eyebrow">HONEST ABOUT THE GAPS</div>
+      <h2>Limitations and next steps</h2>
+      <div class="cards">
+        <article class="card"><h3>Current limitations</h3><p>Sample values are fictional and not agronomic advice. No login, backend, persistence, live feeds, AI, MCP, audit trail, or delivery. Accessible formats need real local-language production and community review.</p></article>
+        <article class="card"><h3>Next improvements</h3><p>Validate with local officers and farmers; integrate trusted, timestamped sources; add durable identity and approval audit; evaluate a grounded, non-autonomous drafting agent; and test language/accessibility with local partners.</p></article>
+        <article class="card"><h3>Before any live launch</h3><p>Review data rights, safety, security, source freshness, consent and delivery safeguards. Enforce officer approval on the server and prove that no model can bypass it.</p></article>
+      </div>
+    </section>
+    <footer class="footer">SautiShamba demo · Sample data only · <a href="index.html">Return to the officer desk</a></footer>
+  </main>
+</body>
+</html>
