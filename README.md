@@ -12,7 +12,7 @@ Smallholder farmer groups need timely, locally relevant advice about planting, s
 
 The proposed officer desk brings group priorities and source-attributed local conditions together with a draft recommendation. An officer can inspect and edit the draft, reject it, or approve it. Only after an explicit human approval could a future delivery system prepare accessible versions for voice, SMS, large print and sign-language interpretation.
 
-The demo illustrates this workflow with fictional groups and sample conditions. Search/filter, group selection, draft editing, rejection, approval state and format previews run in the browser; no message is sent.
+**[Open the live demo](https://inclusiveheartsuganda-boop.github.io/Sautishamba/).** It illustrates this workflow with fictional groups and sample conditions. Search/filter, group selection, draft editing, rejection, approval state and format previews run in the browser; no message is sent.
 
 See [the architecture and workflow explainer](architecture.html) and the [short demo walkthrough](demo-video.webm).
 
